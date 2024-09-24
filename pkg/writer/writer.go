@@ -16,7 +16,7 @@ func NewProgressWriter(writer io.WriteCloser, pb pbar.ProgressBar) *ProgressWrit
 }
 
 func (w *ProgressWriter) Write(p []byte) (n int, err error) {
-	if w.pb == nil {
+	if w.pb != nil {
 		w.pb.Add(len(p))
 	}
 
