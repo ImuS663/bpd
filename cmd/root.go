@@ -8,7 +8,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "bpd [url...]",
-	Short:   "BPD is a CLI tool for downloading files from websites.",
+	Short:   "BPD is a CLI tool for downloading files from websites by Xpath.",
 	Args:    cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	Example: "bpd https://example.com/p1 https://example.com/p2 -x '//*[@id=\"example\"]/div[1]' -H 'header1=value1' -H 'header2=value2'",
 	Run:     func(cmd *cobra.Command, args []string) {},
