@@ -1,4 +1,4 @@
-package writer
+package pbar
 
 import (
 	"github.com/pterm/pterm"
