@@ -8,7 +8,7 @@ type PTermProgressBar struct {
 	pb *pterm.ProgressbarPrinter
 }
 
-func NewPTermProgressBar(name string, total int64) ProgressBar {
+func NewPTermProgressBar(name string, total int64) *PTermProgressBar {
 	pb, _ := pterm.DefaultProgressbar.WithTotal(int(total)).WithTitle(name).WithShowCount(false).Start()
 
 	return &PTermProgressBar{pb: pb}
