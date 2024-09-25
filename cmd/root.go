@@ -3,8 +3,8 @@ package cmd
 import (
 	"io"
 	"os"
-	"path/filepath"
 
+	"github.com/ImuS663/bpd/pkg/file"
 	"github.com/ImuS663/bpd/pkg/net"
 	"github.com/ImuS663/bpd/pkg/parser"
 	"github.com/ImuS663/bpd/pkg/pbar"
@@ -65,11 +65,11 @@ func run(cmd *cobra.Command, args []string) {
 		}
 		defer reader.Close()
 
-		fileName := filepath.Base(url)
+		fileName, filePath := file.GetFilePathAndName(url, outDir)
+
 		pbar := pbar.NewPTermProgressBar(fileName, count)
 
-		filePath := filepath.Join(outDir, fileName)
-		file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY, 0644)
+		file, err := file.OpenFile(filePath)
 		if err != nil {
 			pterm.Error.Println(err)
 			continue
