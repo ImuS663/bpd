@@ -9,7 +9,7 @@ type PTermProgressBar struct {
 }
 
 func NewPTermProgressBar(name string, total int64) *PTermProgressBar {
-	pb, _ := pterm.DefaultProgressbar.WithTotal(int(total)).WithTitle(name).WithShowCount(false).Start()
+	pb, _ := pterm.DefaultProgressbar.WithTotal(int(total)).WithTitle(name).WithShowCount(false).WithMaxWidth(0).WithRemoveWhenDone().Start()
 
 	return &PTermProgressBar{pb: pb}
 }
