@@ -67,15 +67,11 @@ func run(cmd *cobra.Command, args []string) {
 
 		fileName, filePath := file.GetFilePathAndName(url, outDir)
 
-		pbar := pbar.NewPTermProgressBar(fileName, count)
-
-		file, err := file.OpenFile(filePath)
+		writer, err := initWriter(fileName, count, filePath)
 		if err != nil {
 			pterm.Error.Println(err)
 			continue
 		}
-
-		writer := writer.NewProgressWriter(file, pbar)
 		defer writer.Close()
 
 		_, err = io.Copy(writer, reader)
@@ -115,4 +111,16 @@ func parseFilesArgs(urls []string) []string {
 		fulesUrls = append(fulesUrls, result)
 	}
 	return fulesUrls
+}
+
+func initWriter(fileName string, count int64, filePath string) (*writer.ProgressWriter, error) {
+	pbar := pbar.NewPTermProgressBar(fileName, count)
+
+	file, err := file.OpenFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	writer := writer.NewProgressWriter(file, pbar)
+	return writer, nil
 }
