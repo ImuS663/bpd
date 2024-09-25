@@ -43,33 +43,14 @@ func init() {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	urls := make([]string, 0)
-	fulesUrls := make([]string, 0)
-
-	for _, url := range args {
-		if !net.ValidateURL(url) {
-			pterm.Info.Printf("Invalid URL: %s\n", url)
-		} else {
-			urls = append(urls, url)
-		}
-	}
+	urls := validateArgs(args)
 
 	if len(urls) == 0 {
 		pterm.Error.Println("No valid URLs found")
 		os.Exit(1)
 	}
 
-	parser := parser.NewParser(xpath)
-
-	for _, url := range urls {
-		result, err := parser.ParseFileURL(url)
-		if err != nil {
-			pterm.Error.Println(err)
-			continue
-		}
-
-		fulesUrls = append(fulesUrls, result)
-	}
+	fulesUrls := parseFilesArgs(urls)
 
 	if len(fulesUrls) == 0 {
 		pterm.Error.Println("No files found")
@@ -105,4 +86,33 @@ func run(cmd *cobra.Command, args []string) {
 
 		pterm.Success.Printf("File '%s' downloaded successfully\n", fileName)
 	}
+}
+
+func validateArgs(args []string) []string {
+	urls := make([]string, 0)
+
+	for _, url := range args {
+		if !net.ValidateURL(url) {
+			pterm.Info.Printf("Invalid URL: %s\n", url)
+		} else {
+			urls = append(urls, url)
+		}
+	}
+	return urls
+}
+
+func parseFilesArgs(urls []string) []string {
+	fulesUrls := make([]string, 0)
+	parser := parser.NewParser(xpath)
+
+	for _, url := range urls {
+		result, err := parser.ParseFileURL(url)
+		if err != nil {
+			pterm.Error.Println(err)
+			continue
+		}
+
+		fulesUrls = append(fulesUrls, result)
+	}
+	return fulesUrls
 }
