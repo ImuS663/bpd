@@ -22,9 +22,10 @@ var rootCmd = &cobra.Command{
 }
 
 var (
-	xpath   string
-	outDir  string
-	headers map[string]string
+	xpath        string
+	outDir       string
+	headers      map[string]string
+	allConfirmed bool
 )
 
 func Execute() {
@@ -38,6 +39,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&xpath, "xpath", "x", "", "Xpath to the element (required)")
 	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", ".", "Output directory PATH")
 	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", nil, "Request header")
+	rootCmd.Flags().BoolVarP(&allConfirmed, "yes", "y", false, "Confirm all prompts")
 
 	rootCmd.MarkFlagRequired("xpath")
 }
@@ -66,6 +68,12 @@ func run(cmd *cobra.Command, args []string) {
 		defer reader.Close()
 
 		fileName, filePath := file.GetFilePathAndName(url, outDir)
+
+		if file.Exists(filePath) {
+			if !allConfirmed && !confirm(pterm.Sprintf("File '%s' already exists. Do you want to overwrite it?", fileName)) {
+				continue
+			}
+		}
 
 		writer, err := initWriter(fileName, count, filePath)
 		if err != nil {
@@ -123,4 +131,10 @@ func initWriter(fileName string, count int64, filePath string) (*writer.Progress
 
 	writer := writer.NewProgressWriter(file, pbar)
 	return writer, nil
+}
+
+func confirm(msg string) bool {
+	res, _ := pterm.DefaultInteractiveConfirm.Show(pterm.Warning.Sprintf(msg))
+
+	return res
 }
