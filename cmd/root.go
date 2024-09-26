@@ -97,7 +97,11 @@ func validateArgs(args []string) []string {
 
 	for _, url := range args {
 		if !net.ValidateURL(url) {
-			pterm.Info.Printf("Invalid URL: %s\n", url)
+			if allConfirmed || confirm(pterm.Warning.Sprintf("'%s' is not a valid URL. Do you want to continue without it?", url)) {
+				continue
+			} else {
+				os.Exit(0)
+			}
 		} else {
 			urls = append(urls, url)
 		}
@@ -112,8 +116,12 @@ func parseFilesArgs(urls []string) []string {
 	for _, url := range urls {
 		result, err := parser.ParseFileURL(url)
 		if err != nil {
-			pterm.Error.Println(err)
-			continue
+			if allConfirmed || confirm(pterm.Warning.Sprintf("Error parsing '%s'. Do you want to continue without it?", url)) {
+				continue
+			} else {
+				pterm.Error.Println(err)
+				os.Exit(0)
+			}
 		}
 
 		fulesUrls = append(fulesUrls, result)
