@@ -70,7 +70,7 @@ func run(cmd *cobra.Command, args []string) {
 		fileName, filePath := file.GetFilePathAndName(url, outDir)
 
 		if file.Exists(filePath) {
-			if !allConfirmed && !confirm(pterm.Sprintf("File '%s' already exists. Do you want to overwrite it?", fileName)) {
+			if !allConfirmed && !confirm(pterm.Warning.Sprintf("File '%s' already exists. Do you want to overwrite it?", fileName)) {
 				continue
 			}
 		}
@@ -134,7 +134,7 @@ func initWriter(fileName string, count int64, filePath string) (*writer.Progress
 }
 
 func confirm(msg string) bool {
-	res, _ := pterm.DefaultInteractiveConfirm.Show(pterm.Warning.Sprintf(msg))
+	res, _ := pterm.DefaultInteractiveConfirm.Show(msg)
 
 	return res
 }
