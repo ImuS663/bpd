@@ -144,5 +144,10 @@ func initWriter(fileName string, count int64, filePath string) (*writer.Progress
 func confirm(msg string) bool {
 	res, _ := pterm.DefaultInteractiveConfirm.Show(msg)
 
+	// Move cursor up on one line
+	pterm.Print("\x1b[A")
+	// Clear line
+	pterm.Print("\x1b[2K")
+
 	return res
 }
