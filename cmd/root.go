@@ -36,8 +36,14 @@ func Execute() {
 }
 
 func init() {
+	var defaultOutDir = "./"
+
+	if os.Getenv("BPD_OUT_DIR") != "" {
+		defaultOutDir = os.Getenv("BPD_OUT_DIR")
+	}
+
 	rootCmd.Flags().StringVarP(&xpath, "xpath", "x", "", "Xpath to the element (required)")
-	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", ".", "Output directory PATH")
+	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", defaultOutDir, "Output directory PATH")
 	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", nil, "Request header")
 	rootCmd.Flags().BoolVarP(&allConfirmed, "yes", "y", false, "Confirm all prompts")
 
