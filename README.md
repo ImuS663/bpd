@@ -31,7 +31,7 @@ This command will download the files from the specified URLs and save them to th
 
 - `-x` or `--xpath`: Specify the Xpath of the file to download
 - `-o` or `--out-dir`: Specify the output directory for the downloaded files
-  - You can also set the BPD_OUT_DIR environment variable to override the default output directory. For example:
+  - You can also set the `BPD_OUT_DIR` environment variable to override the default output directory. For example:
   
   ```shell
   export BPD_OUT_DIR=/path/to/output/directory
