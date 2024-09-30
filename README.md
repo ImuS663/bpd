@@ -38,6 +38,12 @@ This command will download the files from the specified URLs and save them to th
   ```
 
 - `-H` or `--header`: Specify a custom request header
+  - You can also set the `BPD_HEADERS` environment variable to override the default headers. For example:
+  
+  ```shell
+  export BPD_HEADERS='Accept-Language=en-US|Referer=https://example.com/'
+  ```
+
 - `-y` or `--yes`: Confirm all prompts
 - `-h` or `--help`: Show help message
 
