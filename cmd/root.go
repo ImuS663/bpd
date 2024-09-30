@@ -3,6 +3,7 @@ package cmd
 import (
 	"io"
 	"os"
+	"strings"
 
 	"github.com/ImuS663/bpd/pkg/file"
 	"github.com/ImuS663/bpd/pkg/net"
@@ -37,14 +38,26 @@ func Execute() {
 
 func init() {
 	var defaultOutDir = "./"
+	var defaultHeaders = make(map[string]string)
 
 	if os.Getenv("BPD_OUT_DIR") != "" {
 		defaultOutDir = os.Getenv("BPD_OUT_DIR")
 	}
 
+	if os.Getenv("BPD_HEADERS") != "" {
+		headers := strings.Split(os.Getenv("BPD_HEADERS"), "|")
+
+		for _, header := range headers {
+			split := strings.Split(header, "=")
+			if len(split) == 2 {
+				defaultHeaders[split[0]] = strings.Join(split[1:], "")
+			}
+		}
+	}
+
 	rootCmd.Flags().StringVarP(&xpath, "xpath", "x", "", "Xpath to the element (required)")
 	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", defaultOutDir, "Output directory PATH")
-	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", nil, "Request header")
+	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", defaultHeaders, "Request header")
 	rootCmd.Flags().BoolVarP(&allConfirmed, "yes", "y", false, "Confirm all prompts")
 
 	rootCmd.MarkFlagRequired("xpath")
