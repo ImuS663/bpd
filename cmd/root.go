@@ -58,10 +58,10 @@ func init() {
 		}
 	}
 
-	rootCmd.Flags().StringVarP(&xpath, "xpath", "x", "", "Xpath to the element (required)")
-	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", defaultOutDir, "Output directory PATH")
-	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", defaultHeaders, "Request header")
-	rootCmd.Flags().BoolVarP(&allConfirmed, "yes", "y", false, "Confirm all prompts")
+	rootCmd.Flags().StringVarP(&xpath, "xpath", "x", "", "xpath to the element (required)")
+	rootCmd.Flags().StringVarP(&outDir, "out-dir", "o", defaultOutDir, "output directory PATH")
+	rootCmd.Flags().StringToStringVarP(&headers, "header", "H", defaultHeaders, "request header")
+	rootCmd.Flags().BoolVarP(&allConfirmed, "yes", "y", false, "confirm all prompts")
 
 	rootCmd.MarkFlagRequired("xpath")
 }
