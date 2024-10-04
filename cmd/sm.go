@@ -17,7 +17,7 @@ var smCmd = &cobra.Command{
 	Use:     "sm url...",
 	Short:   "Search and download files from `multiple` webpages by `single` Xpath",
 	Args:    cobra.MatchAll(cobra.MinimumNArgs(1), cobra.OnlyValidArgs),
-	Example: "bpd https://example.com/p1 https://example.com/p2 -x '//*[@id=\"example\"]/div[1]'",
+	Example: "bpd sm https://example.com/p1 https://example.com/p2 -x '//*[@id=\"example\"]/div[1]'",
 	Run:     runSm,
 }
 
