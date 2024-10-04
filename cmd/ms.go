@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"io"
 	"os"
 
-	"github.com/ImuS663/bpd/pkg/file"
+	"github.com/ImuS663/bpd/cmd/downloader"
 	"github.com/ImuS663/bpd/pkg/net"
 	"github.com/ImuS663/bpd/pkg/parser"
 	"github.com/pterm/pterm"
@@ -53,35 +52,5 @@ func runMs(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	for _, url := range fulesUrls {
-		reader, count, err := net.InitReader(url, headers)
-		if err != nil {
-			pterm.Error.Println(err)
-			continue
-		}
-		defer reader.Close()
-
-		fileName, filePath := file.GetFilePathAndName(url, outDir)
-
-		if file.Exists(filePath) {
-			if !allConfirmed && !confirm(pterm.Warning.Sprintf("File '%s' already exists. Do you want to overwrite it?", fileName)) {
-				continue
-			}
-		}
-
-		writer, err := initWriter(fileName, count, filePath)
-		if err != nil {
-			pterm.Error.Println(err)
-			continue
-		}
-		defer writer.Close()
-
-		_, err = io.Copy(writer, reader)
-		if err != nil {
-			pterm.Error.Println(err)
-			continue
-		}
-
-		pterm.Success.Printf("File '%s' downloaded successfully\n", fileName)
-	}
+	downloader.Download(fulesUrls, headers, outDir, allConfirmed)
 }
