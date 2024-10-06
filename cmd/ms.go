@@ -5,7 +5,6 @@ import (
 
 	"github.com/ImuS663/bpd/cmd/downloader"
 	"github.com/ImuS663/bpd/pkg/net"
-	"github.com/ImuS663/bpd/pkg/parser"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -33,24 +32,12 @@ func runMs(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	var fulesUrls = make([]string, 0)
+	filesUrls := downloader.ParseFilesByXPathsAndUrl(args, url, allConfirmed)
 
-	for _, xpath := range args {
-		parser := parser.NewParser(xpath)
-
-		result, err := parser.ParseFileURL(url)
-		if err != nil {
-			pterm.Error.Println(err)
-			continue
-		}
-
-		fulesUrls = append(fulesUrls, result)
-	}
-
-	if len(fulesUrls) == 0 {
+	if len(filesUrls) == 0 {
 		pterm.Error.Println("No files found")
 		os.Exit(1)
 	}
 
-	downloader.Download(fulesUrls, headers, outDir, allConfirmed)
+	downloader.Download(filesUrls, headers, outDir, allConfirmed)
 }

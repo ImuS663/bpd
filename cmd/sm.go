@@ -33,12 +33,12 @@ func runSm(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	fulesUrls := downloader.ParseFilesArgs(urls, xpath, allConfirmed)
+	filesUrls := downloader.ParseFilesByUrlsAndXPath(urls, xpath, allConfirmed)
 
-	if len(fulesUrls) == 0 {
+	if len(filesUrls) == 0 {
 		pterm.Error.Println("No files found")
 		os.Exit(1)
 	}
 
-	downloader.Download(fulesUrls, headers, outDir, allConfirmed)
+	downloader.Download(filesUrls, headers, outDir, allConfirmed)
 }

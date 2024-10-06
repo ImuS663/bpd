@@ -36,8 +36,7 @@ func Download(filesUrls []string, headers map[string]string, outDir string, allC
 		}
 		defer writer.Close()
 
-		_, err = io.Copy(writer, reader)
-		if err != nil {
+		if _, err := io.Copy(writer, reader); err != nil {
 			pterm.Error.Println(err)
 			continue
 		}
@@ -63,12 +62,12 @@ func ValidateArgs(args []string, allConfirmed bool) []string {
 	return urls
 }
 
-func ParseFilesArgs(urls []string, xpath string, allConfirmed bool) []string {
-	fulesUrls := make([]string, 0)
-	parser := parser.NewParser(xpath)
+func ParseFilesByUrlsAndXPath(urls []string, xpath string, allConfirmed bool) []string {
+	filesUrls := make([]string, 0)
+	p := parser.NewParser(xpath)
 
 	for _, url := range urls {
-		result, err := parser.ParseFileURL(url)
+		result, err := p.ParseFileURL(url)
 		if err != nil {
 			if allConfirmed || confirm(pterm.Warning.Sprintf("Error parsing '%s'. Do you want to continue without it?", url)) {
 				continue
@@ -78,9 +77,33 @@ func ParseFilesArgs(urls []string, xpath string, allConfirmed bool) []string {
 			}
 		}
 
-		fulesUrls = append(fulesUrls, result)
+		filesUrls = append(filesUrls, result)
 	}
-	return fulesUrls
+	return filesUrls
+}
+
+func ParseFilesByXPathsAndUrl(xpaths []string, url string, allConfirmed bool) []string {
+	var p parser.Parser
+
+	filesUrls := make([]string, 0)
+
+	for _, xpath := range xpaths {
+		p = *parser.NewParser(xpath)
+
+		result, err := p.ParseFileURL(url)
+		if err != nil {
+			if allConfirmed || confirm(pterm.Warning.Sprintf("Error parsing '%s'. Do you want to continue without it?", url)) {
+				continue
+			} else {
+				pterm.Error.Println(err)
+				os.Exit(0)
+			}
+		}
+
+		filesUrls = append(filesUrls, result)
+	}
+
+	return filesUrls
 }
 
 func initWriter(fileName string, count int64, filePath string) (*writer.ProgressWriter, error) {
