@@ -11,7 +11,7 @@ import (
 
 var msCmd = &cobra.Command{
 	Use:     "ms xpath...",
-	Short:   "Serch and download files from `single` webpage by `multiple` Xpath",
+	Short:   "Search and download files from `single` webpage by `multiple` Xpath",
 	Args:    cobra.MatchAll(cobra.MinimumNArgs(1), cobra.OnlyValidArgs),
 	Example: "bpd ms '//*[@id=\"example\"]/div[1]' '//*[@id=\"example\"]/div[2]' -u https://example.com",
 	Run:     runMs,
