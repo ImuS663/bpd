@@ -22,14 +22,21 @@ go build -o bpd
 BPD can be used to download files from websites by specifying the URL and Xpath of the file. For example:
 
 ```shell
-bpd 'https://example.com/p1' 'https://example.com/p2' -x '//*[@id="example"]/div[1]' -H header1=value1 -H header2=value2 -o path/to/output/directory
+bpd sm 'https://example.com/p1' 'https://example.com/p2' -x '//*[@id="example"]/div[1]/a'
 ```
 
 This command will download the files from the specified URLs and save them to the current directory.
 
-## Options
+or
 
-- `-x` or `--xpath`: Specify the Xpath of the file to download
+```shell
+bpd ms '//*[@id="example"]/div[1]/a' '//*[@id="example"]/div[2]/a' -u 'https://example.com'
+```
+
+This command will download the files from the specified URL and save them to the current directory.
+
+## Global Options
+
 - `-o` or `--out-dir`: Specify the output directory for the downloaded files
   - You can also set the `BPD_OUT_DIR` environment variable to override the default output directory. For example:
   
